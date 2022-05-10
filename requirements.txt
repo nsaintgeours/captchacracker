@@ -3,5 +3,5 @@ streamlit
 matplotlib
 opencv-python-headless
 sentencepiece
+torch
 transformers
-
