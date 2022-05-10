@@ -1,5 +1,3 @@
-import io
-
 import streamlit as st
 
 from captcha_cracker import CaptchaCracker
@@ -12,8 +10,6 @@ with st.sidebar:
 
 if uploaded_file:
     with st.spinner("Craquage en cours..."):
-        print(type(uploaded_file.getvalue()))
-        image_bytes = io.BytesIO(uploaded_file.getvalue())
-        text, input_img, processed_img = cracker.crack(image_file=image_bytes)
+        text, input_img, processed_img = cracker.crack(image_bytes=uploaded_file.getvalue())
         st.subheader(f'Résultat : {text}')
         st.pyplot(fig=cracker.plot(input_img, processed_img))

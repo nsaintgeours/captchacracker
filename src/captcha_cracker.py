@@ -2,14 +2,12 @@
 Function that returns the captcha word from some captcha image.
 """
 
-import io
 from pathlib import Path
 from typing import Tuple
 
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image
 from transformers import TrOCRProcessor, VisionEncoderDecoderModel
 
 OCR_MODEL_CHECKPOINT = 'microsoft/trocr-small-printed'
@@ -19,9 +17,9 @@ OCR_MODEL = VisionEncoderDecoderModel.from_pretrained(OCR_MODEL_CHECKPOINT)
 
 class CaptchaCracker(object):
 
-    def crack(self, image_file: Path or io.BytesIO) -> Tuple[str, np.ndarray, np.ndarray]:
+    def crack(self, image_bytes: bytes) -> Tuple[str, np.ndarray, np.ndarray]:
         """ Cracks captcha image and returns the colored word. """
-        input_img = np.array(Image.open(image_file).convert("RGB"))
+        input_img = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), -1)
         clustered_img = self._cluster_image(img=input_img)
         cropped_img = self._crop_smallest_cluster(img=clustered_img)
         word = self._optical_character_recognition(img=cropped_img)
@@ -98,8 +96,10 @@ class CaptchaCracker(object):
 
 if __name__ == '__main__':
     filepath = Path(__file__).parent.parent / 'data' / 'sample.jpg'
+    with open(filepath, 'rb') as file:
+        img_bytes = file.read()
     cracker = CaptchaCracker()
-    text, input_image, processed_image = cracker.crack(image_file=filepath)
+    text, input_image, processed_image = cracker.crack(image_bytes=img_bytes)
     cracker.plot(input_image, processed_image)
     print(text)
     plt.show()

@@ -10,3 +10,11 @@ https://huggingface.co/microsoft/trocr-small-printed
 I have followed these two tutorials: 
 - https://towardsdatascience.com/deploying-a-basic-streamlit-app-to-heroku-be25a527fcb3  
 - https://towardsdatascience.com/a-quick-tutorial-on-how-to-deploy-your-streamlit-app-to-heroku-874e1250dadd
+
+I installed Heroku CLI, then:
+```
+> heroku login
+> heroku git:remote -a captchacracker
+> heroku buildpacks:set heroku/python
+> git push heroku master
+```

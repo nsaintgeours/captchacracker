@@ -1,7 +1,6 @@
 numpy
 streamlit
 matplotlib
-PIL
 opencv-python
 sentencepiece
 transformers
