@@ -1,7 +1,7 @@
 numpy
 streamlit
 matplotlib
-opencv-python
+opencv-python-headless
 sentencepiece
 transformers
 
