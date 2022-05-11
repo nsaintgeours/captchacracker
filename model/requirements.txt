@@ -1,7 +1,8 @@
 numpy
-streamlit
-matplotlib
 opencv-python-headless
 sentencepiece
 torch
 transformers
+uvicorn
+fastapi
+python-multipart

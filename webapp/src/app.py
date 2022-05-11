@@ -1,8 +1,6 @@
 import streamlit as st
 
-from captcha_cracker import CaptchaCracker
-
-cracker = CaptchaCracker()
+from captcha_cracker_client import crack_captcha
 
 with st.sidebar:
     st.title("Captcha cracker")
@@ -10,6 +8,5 @@ with st.sidebar:
 
 if uploaded_file:
     with st.spinner("Craquage en cours..."):
-        text, input_img, processed_img = cracker.crack(image_bytes=uploaded_file.getvalue())
+        text = crack_captcha(img_file=uploaded_file.getvalue())
         st.subheader(f'Résultat : {text}')
-        st.pyplot(fig=cracker.plot(input_img, processed_img))

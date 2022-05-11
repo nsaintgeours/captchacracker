@@ -2,10 +2,16 @@
 
 The Captcha Cracker app' is available here: https://captchacracker.herokuapp.com/  
 
-The app' uses an optical character recognition lightweight model from Hugging Face: 
+The app' uses lightweight model for optical character recognition from Hugging Face: 
 https://huggingface.co/microsoft/trocr-small-printed
 
-## How to deploy the app' on Heroku 
+## Run locally
+
+```
+> streamlit run src/app.py
+```
+
+## Deploy on Heroku 
 
 I have followed these two tutorials: 
 - https://towardsdatascience.com/deploying-a-basic-streamlit-app-to-heroku-be25a527fcb3  
