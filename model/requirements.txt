@@ -1,7 +1,9 @@
+-f https://download.pytorch.org/whl/torch_stable.html
 numpy
 opencv-python-headless
 sentencepiece
-torch
+torch=1.11.0+cpu
+torchvision==0.12.0+cpu
 transformers
 uvicorn
 fastapi
