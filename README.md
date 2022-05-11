@@ -14,6 +14,8 @@ To run the project locally:
 > streamlit run src/app.py
 ```
 
+m
+
 ## Deploy on Heroku 
 
 I have followed these two tutorials: 
