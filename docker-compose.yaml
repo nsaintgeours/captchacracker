@@ -2,28 +2,25 @@ version: "3.4"
 
 services:
 
+  # A simple web app' powered by Streamlit
   webapp:
-    # A simple web app' powered by Streamlit
     container_name: webapp_container
     restart: always
-    build:
+    build: # Docker container is built from the /webapp folder
       context: ./webapp
-      dockerfile: Dockerfile
       args:
         - WEBAPP_PORT
-    env_file: .env
-    ports:
-      - "${WEBAPP_PORT}:${WEBAPP_PORT}"
+    env_file: .env # Default environment variables are loaded from .env file and passed to the webapp container
     environment:
       # These environment variables override the default values given in .env file
       - MODEL_HOSTNAME=model
+    ports:
+      - "${WEBAPP_PORT}:${WEBAPP_PORT}"
 
+  # The CaptchaCracker model served through a REST API
   model:
-    # The CaptchaCracker model served through a REST API
     container_name: model_container
-    build:
+    build: # Docker container is built from the /model folder
       context: ./model
-      dockerfile: Dockerfile
-    env_file: .env
     ports:
       - "${MODEL_PORT}:${MODEL_PORT}"

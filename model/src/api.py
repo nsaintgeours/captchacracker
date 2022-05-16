@@ -4,7 +4,7 @@ kl
 import uvicorn
 from fastapi import FastAPI, UploadFile, File
 
-from captcha_cracker import CaptchaCracker
+from src.captcha_cracker import CaptchaCracker
 
 cracker = CaptchaCracker()
 api = FastAPI()
@@ -17,4 +17,4 @@ async def crack(file: UploadFile = File(...)):
 
 
 if __name__ == '__main__':
-    uvicorn.run(api, host='127.0.0.1', port=8000)
+    uvicorn.run(api, host='0.0.0.0', port=80)
