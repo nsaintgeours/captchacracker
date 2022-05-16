@@ -20,8 +20,8 @@ docker-build:
         tag=":$CI_COMMIT_REF_SLUG"
         echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
       fi
-    - docker build --pull -t "captcha-cracker-model${tag}" --build-arg MODEL_PORT=88 ./model
-    - docker build --pull -t "captcha-cracker-webapp${tag}" --build-arg WEBAPP_PORT=8504 ./webapp
-    - docker push "captcha-cracker-model${tag}"
-    - - docker push "captcha-cracker-webapp${tag}"
+    - docker build --pull -t "registry.gitlab.com/data-terrae/projects/captchacracker/captcha-cracker-model${tag}" --build-arg MODEL_PORT=88 ./model
+    - docker build --pull -t "registry.gitlab.com/data-terrae/projects/captchacracker/captcha-cracker-webapp${tag}" --build-arg WEBAPP_PORT=8504 ./webapp
+    - docker push "registry.gitlab.com/data-terrae/projects/captchacracker/captcha-cracker-model${tag}"
+    - docker push "registry.gitlab.com/data-terrae/projects/captchacracker/captcha-cracker-webapp${tag}"
 

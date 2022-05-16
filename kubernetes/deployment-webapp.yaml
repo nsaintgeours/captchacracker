@@ -34,7 +34,7 @@ spec:
         - name: registry-credentials
       containers:
         - env:
-          image: registry.gitlab.com/data-terrae-airel-quetin/airlog/gateway:1.0.0-SNAPSHOT
+          image: registry.gitlab.com/projects/captcha-cracker/captcha-cracker-webapp:latest
           imagePullPolicy: Always
           name: webapp-container
           ports:
