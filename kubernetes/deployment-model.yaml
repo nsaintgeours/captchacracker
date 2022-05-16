@@ -4,15 +4,15 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/name: model-svc
-  name: model-svc
+    app.kubernetes.io/name: model
+  name: model
 spec:
   ports:
     - name: http
       port: 88
       targetPort: 88
   selector:
-    app.kubernetes.io/name: model-svc
+    app.kubernetes.io/name: model
   type: ClusterIP
 
 ---
@@ -37,7 +37,7 @@ spec:
         - name: registry-credentials
       containers:
         - env:
-          image: registry.gitlab.com/projects/captcha-cracker/captcha-cracker-model:latest
+          image: registry.gitlab.com/data-terrae/projects/captchacracker/captcha-cracker-model:latest
           imagePullPolicy: Always
           name: model-container
           ports:
