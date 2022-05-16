@@ -1,0 +1,130 @@
+# This configuration file defines two Kubernetes services:
+# - first service is a REST API serving the CaptchaCracker model
+# - second service is the CaptchaCracker web app'
+# Both services are deployed from existing Docker images stored on Gitlab Registry.
+# An 'network ingress' is also defined here, so that the CaptchaCracker web app' can be accessed from public URL:
+# https://captchacracker.data-cafe.io
+
+# Define a Kubernetes Service named "model" for CaptchaCracker REST API
+apiVersion: v1
+kind: Service
+metadata:
+  name: model
+  labels:
+    app.kubernetes.io/name: model
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 88
+      targetPort: 88
+  selector:
+    app.kubernetes.io/name: model
+
+---
+# Define how to deploy the Kubernetes Service named "model" from a Docker image stored on Gitlab Registry
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: model
+  name: model
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: model
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: model
+    spec:
+      imagePullSecrets:
+        - name: registry-credentials
+      containers:
+        - name: model-container
+          image: registry.gitlab.com/data-terrae/projects/captchacracker/captcha-cracker-model:latest
+          imagePullPolicy: Always
+          env:
+          ports:
+            - containerPort: 88
+              name: http
+              protocol: TCP
+
+
+---
+# Define a Kubernetes Service named "webapp" for CaptchaCracker web app'
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: webapp
+  name: webapp
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8504
+      targetPort: 8504
+  selector:
+    app.kubernetes.io/name: webapp
+
+---
+# Define how to deploy the Kubernetes Service named "webapp" from a Docker image stored on Gitlab Registry
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+  labels:
+    app.kubernetes.io/name: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: webapp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: webapp
+    spec:
+      imagePullSecrets:
+        - name: registry-credentials
+      containers:
+        - env:
+            - name: MODEL_HOSTNAME
+              value: "model"
+            - name: MODEL_PORT
+              value: "88"
+          image: registry.gitlab.com/data-terrae/projects/captchacracker/captcha-cracker-webapp:latest
+          imagePullPolicy: Always
+          name: webapp-container
+          ports:
+            - containerPort: 8504
+              name: http
+              protocol: TCP
+
+---
+# Define network ingress to access the CaptchaCracker web app' from the public URL https://captchacracker.data-cafe.io
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: captcha-cracker-io
+  namespace: captcha-cracker
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - captchacracker.data-cafe.io
+    secretName: captchacracker-secret-io-tls
+  rules:
+  - host: captchacracker.data-cafe.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: webapp
+            port:
+              number: 8504
