@@ -45,6 +45,9 @@ spec:
         - name: model-container
           image: registry.gitlab.com/data-terrae/projects/captchacracker/captcha-cracker-model:latest
           imagePullPolicy: Always
+          env:
+             - name: MODEL_PORT
+               value: '88'
           ports:
             - containerPort: 88
               name: http
